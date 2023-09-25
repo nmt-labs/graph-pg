@@ -1,11 +1,11 @@
-package representation;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 class AdjacenceMatrix {
   public static void main(String[] args) throws FileNotFoundException {
-  Scanner scanner = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in);
     String smallFile = "graph-test-100.txt";
     String largeFile = "graph-test-50000.txt";
     String tinyFile = "graph-test-5.txt";
