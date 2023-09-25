@@ -1,10 +1,11 @@
+package representation;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-class IncidenceMatrix {
+class AdjacenceMatrix {
   public static void main(String[] args) throws FileNotFoundException {
-    Scanner scanner = new Scanner(System.in);
+  Scanner scanner = new Scanner(System.in);
     String smallFile = "graph-test-100.txt";
     String largeFile = "graph-test-50000.txt";
     String tinyFile = "graph-test-5.txt";
@@ -30,14 +31,13 @@ class IncidenceMatrix {
     int edges = scanner.nextInt();
 
     // create matrix
-    int[][] matrix = new int[vertices][edges];
+    int[][] matrix = new int[vertices][vertices];
 
     // read until edge
     for (int i = 0; i < edges; i++) {
       // complete matrix
       // scanner.nextInt() - 1 -> to complete the correct line from matrix
-      matrix[scanner.nextInt() - 1][i] = -1;
-      matrix[scanner.nextInt() - 1][i] = +1;
+      matrix[scanner.nextInt() - 1][scanner.nextInt() - 1] = 1;
     }
 
     // close scanner
@@ -47,8 +47,8 @@ class IncidenceMatrix {
     aux = 0;
     // find biggest output degree value
     for (int i = 0; i < vertices; i++) {
-      for (int j = 0; j < edges; j++) {
-        if (matrix[i][j] < 0)
+      for (int j = 0; j < vertices; j++) {
+        if (matrix[i][j] == 1)
           aux++;
       }
       if (aux > outputDegree) {
@@ -62,29 +62,24 @@ class IncidenceMatrix {
     outputSucessors = new int[outputDegree];
     aux = 0;
     // find biggest output degree vertex sucessors
-    for (int j = 0; j < edges; j++) {
-      if (matrix[outputVertex][j] < 0) {
-        for (int i = 0; i < vertices; i++) {
-          if (matrix[i][j] > 0) {
-            outputSucessors[aux++] = i + 1;
-            i = vertices;
-          }
-        }
+    for (int j = 0; j < vertices; j++) {
+      if (matrix[outputVertex][j] == 1) {
+        outputSucessors[aux++] = j + 1;
       }
     }
 
     // input degree info
     aux = 0;
     // find biggest input degree value
-    for (int i = 0; i < vertices; i++) {
-      for (int j = 0; j < edges; j++) {
+    for (int j = 0; j < vertices; j++) {
+      for (int i = 0; i < vertices; i++) {
         if (matrix[i][j] > 0)
           aux++;
       }
       if (aux > inputDegree) {
         inputDegree = aux;
         // inputtVertex will be the first occurrence
-        inputVertex = i;
+        inputVertex = j;
       }
       aux = 0;
     }
@@ -92,14 +87,9 @@ class IncidenceMatrix {
     inputPredecessors = new int[inputDegree];
     aux = 0;
     // find biggest input degree vertex sucessors
-    for (int j = 0; j < edges; j++) {
-      if (matrix[inputVertex][j] > 0) {
-        for (int i = 0; i < vertices; i++) {
-          if (matrix[i][j] < 0) {
-            inputPredecessors[aux++] = i + 1;
-            i = vertices;
-          }
-        }
+    for (int i = 0; i < vertices; i++) {
+      if (matrix[i][inputVertex] == 1) {
+        inputPredecessors[aux++] = i + 1;
       }
     }
 
