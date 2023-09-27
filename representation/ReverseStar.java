@@ -5,9 +5,9 @@ import java.util.Scanner;
 class ReverseStar {
   public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        String smallFile = "./run-files/graph-test-100.txt";
-        String largeFile = "./run-files/graph-test-50000.txt";
-        String tinyFile = "./run-files/graph-test-5.txt";
+        String smallFile = "../run-files/graph-test-100.txt";
+        String largeFile = "../run-files/graph-test-50000.txt";
+        String tinyFile = "../run-files/graph-test-5.txt";
         int op;
         // read file
         System.out.println("Choose test file");
@@ -131,7 +131,7 @@ class ReverseStar {
         // ---Sort destination array---
         sort(origin, destination);
 
-        int arc_src[] = origin;
+        //int arc_src[] = origin;
         int rev_pointer[] = new int[vertexAmt + 2];
 
         // ---Fill pointer array---
