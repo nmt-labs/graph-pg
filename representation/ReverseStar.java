@@ -1,5 +1,3 @@
-
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -7,9 +5,9 @@ import java.util.Scanner;
 class ReverseStar {
   public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        String smallFile = "'graph-test-100.txt";
-        String largeFile = "graph-test-50000.txt";
-        String tinyFile = "graph-test-5.txt";
+        String smallFile = "./run-files/graph-test-100.txt";
+        String largeFile = "./run-files/graph-test-50000.txt";
+        String tinyFile = "./run-files/graph-test-5.txt";
         int op;
         // read file
         System.out.println("Choose test file");

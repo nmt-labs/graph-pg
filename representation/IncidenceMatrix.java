@@ -1,14 +1,13 @@
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-class IncidenceMatrix {
+public class IncidenceMatrix {
   public static void main(String[] args) throws FileNotFoundException {
     Scanner scanner = new Scanner(System.in);
-    String smallFile = "graph-test-100.txt";
-    String largeFile = "graph-test-50000.txt";
-    String tinyFile = "graph-test-5.txt";
+    String smallFile = "./run-files/graph-test-100.txt";
+    String largeFile = "./run-files/graph-test-50000.txt";
+    String tinyFile = "./run-files/graph-test-5.txt";
     int op;
     int outputDegree = 0, inputDegree = 0, outputVertex = 0, inputVertex = 0, aux;
     int[] outputSucessors, inputPredecessors;
