@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import representation.*;
+import search.*;
 
 public class Graph {
   public static Scanner sc = new Scanner(System.in);
@@ -47,6 +48,7 @@ public class Graph {
         }
 
       case 2:
+        DepthFirstSearch dfs = new DepthFirstSearch(fileOp);
     }
 
     sc.close();

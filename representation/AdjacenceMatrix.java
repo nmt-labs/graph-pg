@@ -6,9 +6,13 @@ import java.util.Scanner;
 
 public class AdjacenceMatrix {
   public static Scanner sc;
-  int vertices, edges, outputDegree = 0, inputDegree = 0, outputVertex = 0, inputVertex = 0, aux;
-  int[] outputSucessors, inputPredecessors;
-  int[][] matrix;
+  private int vertices, edges, outputDegree = 0, inputDegree = 0, outputVertex = 0, inputVertex = 0, aux;
+  private int[] outputSucessors, inputPredecessors;
+  private int[][] matrix;
+
+  public int[][] getMatrix() {
+    return matrix;
+  }
 
   public AdjacenceMatrix(String file) throws FileNotFoundException {
     sc = new Scanner(new File(file)); 
