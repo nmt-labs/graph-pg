@@ -34,17 +34,24 @@ public class Graph {
         System.out.println("Choose type");
         System.out.println("1 - Incidence matrix");
         System.out.println("2 - Adjacence matrix");
+        System.out.println("3 - Reverse star");
 
         op = sc.nextInt();
         IncidenceMatrix im;
         AdjacenceMatrix am;
+        ReverseStar rs;
         if (op == 1) {
           im = new IncidenceMatrix(fileOp);
           im.printInfo();
         }
-        else {
+        else if (op == 2) {
           am = new AdjacenceMatrix(fileOp);
           am.printInfo();
+        }
+        else {
+          rs = new ReverseStar(fileOp);
+          rs.getVertex();
+          rs.getVertexPredecessor();
         }
 
       case 2:

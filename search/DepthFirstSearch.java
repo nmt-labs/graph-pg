@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import representation.AdjacenceMatrix;
+import representation.ReverseStar;
 
 // matriz [vertices v][4] -> guarda valor do vertice[v][0],  tt[v][1], td[v][2] e predecessor[v][3]
 // t = 0 -> inicia tempo globlal
@@ -25,18 +25,18 @@ import representation.AdjacenceMatrix;
 
 public class DepthFirstSearch {
   public static Scanner sc;
-  private AdjacenceMatrix graph;
+  private ReverseStar graph;
   private int[][] matrix;
   private int t;
 
   public DepthFirstSearch(String file) throws FileNotFoundException {
     sc = new Scanner(new File(file));
-    graph = new AdjacenceMatrix(file);
+    graph = new ReverseStar(file);
     // matrix [vertices v][4] -> vertice value[v][0],  tt[v][1], td[v][2] e predecessor[v][3]
-    matrix = new int[graph.getVertices()][4];
+    matrix = new int[graph.getVertexAmt()][4];
     // inicialize global time and predecessors
     t = 0;
-    for (int i = 0; i < graph.getVertices(); i ++) {
+    for (int i = 0; i < graph.getVertexAmt(); i ++) {
       matrix[i][0] = i+1;
       matrix[i][1] = 0;      
       matrix[i][2] = 0;
@@ -54,13 +54,21 @@ public class DepthFirstSearch {
     // td = t
     matrix[v][2] = t;
 
-    // para todo vertice w vizinho de [v]
-      // se matriz[w][2] = 0 (v nao descoberto)
+    // for each v neighbor
+    for (int w = 0; w < graph.getVertexAmt(); w++) {
+      // if w not discovered
+      if (matrix[w][2] == 0 ) {
         // aresta {v, w} -> arvore
-        // matriz[w][3] = v
-        // busca em w
-      // senao se matriz[w][1] = 0 && w != matriz[v][3] (w nao acabou e nao e pai de v -> w e ancestral mas nao pai de v)
+        System.out.println();
+        // w parent = v
+        matrix[w][3] = v;
+        dfs(w);
+      }
+      // if w isn't over and isn't v ancestral
+      else if (matrix[w][1] == 0 && w != matrix[v][3]) {
         // aresta {v, w} -> retorno
+      }
+    }
     
     t++;
     // tt = t
@@ -71,17 +79,20 @@ public class DepthFirstSearch {
 
   /**
    * Method to verify if there's vertices yet to discover
-   * @return boolean
+   * @return
    */
   private boolean isToDiscover() {
-    for (int i = 0; i < graph.getVertices(); i ++) {
+    for (int i = 0; i < graph.getVertexAmt(); i ++) {
       if (matrix[i][2] == 0) return true;
     }
     return false;
   }
-
+  /**
+   * Method to find next vertice to search
+   * @return vertex value
+   */
   private int getSearchVertice() {
-    for (int i = 0; i < graph.getVertices(); i ++) {
+    for (int i = 0; i < graph.getVertexAmt(); i ++) {
       if (matrix[i][2] == 0) return i;
     }
     return -1;

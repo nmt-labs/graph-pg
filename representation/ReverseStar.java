@@ -1,61 +1,41 @@
 package representation;
 
-/*
- * Eduardo Lemos Paschoalini.
- * @autor EduLemos0 on GitHub.
- * It takes a while to run the 50.000 one.
- */
-
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-class ReverseStar {
-  public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        String smallFile = "../run-files/graph-test-100.txt";
-        String largeFile = "../run-files/graph-test-50000.txt";
-        String tinyFile = "../run-files/graph-test-5.txt";
-        int op;
-        // read file
-        System.out.println("Choose test file");
-        System.out.println("1 - small file (100)");
-        System.out.println("2 - large file (50000)");
-        System.out.println("3 - tiny file (5)");
-        op = sc.nextInt();
+public class ReverseStar {
+    public static Scanner sc;
+    private int vertexAmt, arcsAmt;
+    private int[] origin, destination, pointer, rev_pointer;
 
-        if (op == 1)
-          sc = new Scanner(new File(smallFile));
-        else
-          sc = new Scanner(new File(largeFile));
-        if (op == 3)
-          sc = new Scanner(new File(tinyFile));
+    public int getVertexAmt() {
+      return vertexAmt;
+    }
 
-        // ---Variables---
-        int vertexAmt = sc.nextInt();
-        int arcsAmt = sc.nextInt();
-        int origin[] = new int[arcsAmt + 1];
-        int destination[] = new int[arcsAmt + 1];
+    public ReverseStar(String file) throws FileNotFoundException {
+        sc = new Scanner(new File(file));
 
-        // ---Fill origin & destination---
-        int it = 1; // Always ignore position 1
+        vertexAmt = sc.nextInt();
+        arcsAmt = sc.nextInt();
+        origin = new int[arcsAmt + 1];
+        destination = new int[arcsAmt + 1];
+
+        int i = 1; // always ignore position 1
         while (sc.hasNextInt()) {
-            origin[it] = sc.nextInt();
-            destination[it++] = sc.nextInt();
+            origin[i] = sc.nextInt();
+            destination[i++] = sc.nextInt();
         }
         sc.close();
 
-        // ---Foward-star---
-        forwardStar(vertexAmt, arcsAmt, origin, destination);
-        // ---Reverse-star---
-        reverseStar(vertexAmt, arcsAmt, origin, destination);
+        forwardStar();
+        reverseStar();
     }
 
-    public static void forwardStar(int vertexAmt, int arcsAmt, int origin[], int destination[]) {
+    private void forwardStar() {
 
         // ---Create arc_dest & pointer arrays---
-        int arc_dest[] = destination;
-        int pointer[] = new int[vertexAmt + 2];
+        pointer = new int[vertexAmt + 2];
 
         // ---Fill pointer array---
         int pos = 1;
@@ -69,17 +49,60 @@ class ReverseStar {
             }
             pos++;
         }
-
-        // ---Get vertex with highest degree and it's sucessors---
-        getVertex(pointer, origin, arc_dest);
     }
 
-    /* This method prints the highest degree and to which vertex it belongs */
-    public static void getVertex(int pointer[], int origin[], int destination[]) {
+    private void reverseStar() {
+
+        // ---Sort destination array---
+        sort(origin, destination);
+
+        //int arc_src[] = origin;
+        rev_pointer = new int[vertexAmt + 2];
+
+        // ---Fill pointer array---
+        int pos = 1;
+        while (pos <= rev_pointer.length) {
+            if (pos == 1) {
+                rev_pointer[pos] = 1;
+            } else if (pos < rev_pointer.length) {
+                rev_pointer[pos] = getFirstInstance(pos, destination);
+            } else if (pos == rev_pointer.length) {
+                rev_pointer[pos - 1] = (arcsAmt + 1);
+            }
+            pos++;
+        }
+    }
+
+    /**
+     * This function returns the position in which the @@target parameter is first found
+     * @param target
+     * @param origin
+     * @return
+     */
+    private static int getFirstInstance(int target, int origin[]) {
+        int it = 1; // Always skip position 0.
+        int value = 0;
+
+        while (it < origin.length) {
+            if (origin[it] == target) {
+                value = it;
+                it = origin.length; // break operation
+            }
+            it++;
+        }
+        return value;
+    }
+
+    /**
+     * This method prints the highest degree and to which vertex it belongs
+     * @param pointer
+     * @param origin
+     * @param destination
+     */
+    public void getVertex() {
         int highestDegree = 0;
         int vertex = 0;
 
-        /*  */
         for (int i = 1; i < pointer.length; i++) {
             if (i + 1 < pointer.length) {
                 int curr = pointer[i];
@@ -101,65 +124,21 @@ class ReverseStar {
             sucessors[i] = destination[pos++];
         }
 
-        System.out.println("------Forward-Star------");
-        System.out.println("Vertice: " + vertex);
-        System.out.println("Grau de saida: " + highestDegree);
-        for (int s : sucessors) {
-            System.out.print(s + " ");
-        }
         System.out.println();
-        System.out.println("------------------------");
+        System.out.println("Output vertex: " + (vertex));
+        System.out.println("Degree: " + highestDegree);
+        System.out.println("Sucessors: ");
+        for (int i = 0; i < sucessors.length; i++)
+          System.out.print(sucessors[i] + " ");
     }
 
-    /*
-     * This function returns the position in which the @@target parameter is first
-     * found.
+    /**
+     * Method that gets the entry degree & the predecessors
+     * @param rev_pointer
+     * @param destination
+     * @param origin
      */
-    public static int getFirstInstance(int target, int origin[]) {
-        int it = 1; // Always skip position 0.
-        int value = 0;
-
-        while (it < origin.length) {
-            if (origin[it] == target) {
-                value = it;
-                it = origin.length; // break operation
-            }
-            it++;
-        }
-        return value;
-    }
-
-    /*
-     * Reverse-Star Algorithim
-     * I used selection-sort to sort the destination array.
-     */
-    public static void reverseStar(int vertexAmt, int arcsAmt, int[] origin, int[] destination) {
-        // @@TODO
-
-        // ---Sort destination array---
-        sort(origin, destination);
-
-        //int arc_src[] = origin;
-        int rev_pointer[] = new int[vertexAmt + 2];
-
-        // ---Fill pointer array---
-        int pos = 1;
-        while (pos <= rev_pointer.length) {
-            if (pos == 1) {
-                rev_pointer[pos] = 1;
-            } else if (pos < rev_pointer.length) {
-                rev_pointer[pos] = getFirstInstance(pos, destination);
-            } else if (pos == rev_pointer.length) {
-                rev_pointer[pos - 1] = (arcsAmt + 1);
-            }
-            pos++;
-        }
-
-        getVertexPredecessor(rev_pointer, destination, origin);
-    }
-
-    /* Method that gets the entry degree & the predecessors */
-    public static void getVertexPredecessor(int[] rev_pointer, int[] destination, int[] origin) {
+    public void getVertexPredecessor() {
         int highestDegree = 0;
         int vertex = 0;
 
@@ -185,19 +164,21 @@ class ReverseStar {
             predecessors[i] = origin[pos++];
         }
 
-        // Printing out data
-        System.out.println("------Reverse-Star------");
-        System.out.println("Vertice: " + vertex);
-        System.out.println("Grau de saida: " + highestDegree);
-        for (int s : predecessors) {
-            System.out.print(s + " ");
-        }
         System.out.println();
+        System.out.println("Input vertex: " + (vertex + 1));
+        System.out.println("Degree: " + highestDegree);
+        System.out.println("Predecessors: ");
+        for (int i = 0; i < predecessors.length; i++)
+          System.out.print(predecessors[i] + " ");
 
     }
 
-    /* QuickSort algorithim */
-    public static void sort(int[] origin, int[] destination) {
+    /**
+     * Quicksort algorithim
+     * @param origin
+     * @param destination
+     */
+    private static void sort(int[] origin, int[] destination) {
         int n = destination.length;
 
         // One by one move boundary of unsorted subarray
