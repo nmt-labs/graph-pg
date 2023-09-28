@@ -13,6 +13,9 @@ public class AdjacenceMatrix {
   public int[][] getMatrix() {
     return matrix;
   }
+  public int getVertices() {
+    return vertices;
+  }
 
   public AdjacenceMatrix(String file) throws FileNotFoundException {
     sc = new Scanner(new File(file)); 
