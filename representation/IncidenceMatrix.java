@@ -1,48 +1,38 @@
+package representation;
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class IncidenceMatrix {
-  public static void main(String[] args) throws FileNotFoundException {
-    Scanner scanner = new Scanner(System.in);
-    String smallFile = "../run-files/graph-test-100.txt";
-    String largeFile = "../run-files/graph-test-50000.txt";
-    String tinyFile = "../run-files/graph-test-5.txt";
-    int op;
-    int outputDegree = 0, inputDegree = 0, outputVertex = 0, inputVertex = 0, aux;
-    int[] outputSucessors, inputPredecessors;
-    // read file
-    System.out.println("Choose test file");
-    System.out.println("1 - small file (100)");
-    System.out.println("2 - large file (50000)");
-    System.out.println("3 - tiny file (5)");
-    op = scanner.nextInt();
+  public static Scanner sc;
+  int vertices, edges, outputDegree = 0, inputDegree = 0, outputVertex = 0, inputVertex = 0, aux;
+  int[] outputSucessors, inputPredecessors;
+  int[][] matrix;
 
-    if (op == 1)
-      scanner = new Scanner(new File(smallFile));
-    else
-      scanner = new Scanner(new File(largeFile));
-    if (op == 3)
-      scanner = new Scanner(new File(tinyFile));
+  public IncidenceMatrix(String file) throws FileNotFoundException {
+    sc = new Scanner(new File(file)); 
 
-    // read first line
-    int vertices = scanner.nextInt();
-    int edges = scanner.nextInt();
+    vertices = sc.nextInt();
+    edges = sc.nextInt();
 
     // create matrix
-    int[][] matrix = new int[vertices][edges];
+    matrix = new int[vertices][edges];
 
     // read until edge
     for (int i = 0; i < edges; i++) {
       // complete matrix
-      // scanner.nextInt() - 1 -> to complete the correct line from matrix
-      matrix[scanner.nextInt() - 1][i] = -1;
-      matrix[scanner.nextInt() - 1][i] = +1;
+      // sc.nextInt() - 1 -> to complete the correct line from matrix
+      matrix[sc.nextInt() - 1][i] = -1;
+      matrix[sc.nextInt() - 1][i] = +1;
     }
 
-    // close scanner
-    scanner.close();
+    // close sc
+    sc.close();
+  }
 
+  public void printInfo() {
     // output degree info
     aux = 0;
     // find biggest output degree value
