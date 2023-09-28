@@ -1,5 +1,11 @@
 package representation;
 
+/*
+ * Eduardo Lemos Paschoalini.
+ * @autor EduLemos0 on GitHub.
+ * It takes a while to run the 50.000 one.
+ */
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
