@@ -13,6 +13,11 @@ public class DepthFirstSearch {
   private int[] pointer, destination, arcTypes;
   private int t;
 
+  /**
+   * Depht First Search class using Reverse Star
+   * @param file
+   * @throws FileNotFoundException
+   */
   public DepthFirstSearch(String file) throws FileNotFoundException {
     sc = new Scanner(new File(file));
     graph = new ReverseStar(file);
@@ -67,6 +72,9 @@ public class DepthFirstSearch {
     matrix[v][2] = t; // tt = t
   }
 
+  /**
+   * Method to print all tree arcs from a graph
+   */
   public void print() {
     System.out.println();
 
@@ -74,7 +82,21 @@ public class DepthFirstSearch {
       int v = index;
       int w;
       int sucessors = pointer[v + 1] - pointer[v];
-      for (int j = 0; j < sucessors; j++){
+      for (int j = 0; j < sucessors; j++) {
+        if (arcTypes[pointer[v] + j] == 1) {
+          w = destination[pointer[v] + j];
+          System.out.println("Tree -> {" + v + ", " + w + "}");
+        }
+      }
+    }
+  }
+
+  public void printArcs(int v) {
+
+    if (v <= graph.getVertexAmt() && v > 0) {
+      int w;
+      int sucessors = pointer[v + 1] - pointer[v];
+      for (int j = 0; j < sucessors; j++) {
         if (arcTypes[pointer[v] + j] == 1) {
           w = destination[pointer[v] + j];
           System.out.println("Tree -> {" + v + ", " + w + "}");
@@ -93,6 +115,7 @@ public class DepthFirstSearch {
         }
       }
     }
+    else System.err.println("Invalid vertex.");
   }
 
   // utilities -------------------------------------------------------------------------

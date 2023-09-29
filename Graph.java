@@ -61,6 +61,9 @@ public class Graph {
       case 2:
         DepthFirstSearch dfs = new DepthFirstSearch(fileOp);
         dfs.print();
+        System.out.println("Choose a vertex: ");
+        op = sc.nextInt();
+        dfs.printArcs(op);
         break;
     }
 
