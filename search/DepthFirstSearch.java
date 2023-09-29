@@ -10,22 +10,28 @@ public class DepthFirstSearch {
   public static Scanner sc;
   private ReverseStar graph;
   private int[][] matrix;
+  private int[] pointer, destination, arcTypes;
   private int t;
 
   public DepthFirstSearch(String file) throws FileNotFoundException {
     sc = new Scanner(new File(file));
     graph = new ReverseStar(file);
-    // matrix [vertices v][4] -> vertice value[v][0],  tt[v][1], td[v][2] e predecessor[v][3]
+    pointer = graph.getPointer();
+    destination = graph.getDestination();
+    arcTypes = new int[destination.length];
+    // matrix [vertices v][4] -> vertice value[v][0],  td[v][1], tt[v][2] e predecessor[v][3]
     matrix = new int[graph.getVertexAmt() + 1][4];
+    
     // inicialize global time and predecessors
     t = 0;
-    for (int i = 1; i <= graph.getVertexAmt(); i++) {
+    for (int i = 0; i <= graph.getVertexAmt(); i++) {
       matrix[i][0] = i;
       matrix[i][1] = 0;      
       matrix[i][2] = 0;
       matrix[i][3] = 0;
     }
-    // enquanto existir algum matriz[v][2] = 0 -> realizar busca em v
+    
+    // until there's vertex to discover
     while(isToDiscover()) {
       int v = getSearchVertex();
       if (v != -1) search(v);
@@ -34,47 +40,59 @@ public class DepthFirstSearch {
 
   private void search(int v) {
     t++;
-    // td = t
-    matrix[v][2] = t;
+    matrix[v][1] = t; // td = t
+
     // get number of sucessors
-    int[] pointer = graph.getPointer();
     int sucessors = pointer[v + 1] - pointer[v];
-    System.out.println("sucessors: " + sucessors);
 
     // for each v neighbor
     for (int i = 0; i < sucessors; i++) {
-      int w = graph.getDestination()[pointer[v] + i];
+      int w = destination[pointer[v] + i];
       // if w not discovered
-      if (matrix[w][2] == 0 ) {
+      if (matrix[w][1] == 0 ) {
         // {v, w} -> tree
-        System.out.println("Tree -> {" + v + ", " + w + "}");
-        // w parent = v
-        matrix[w][3] = v;
+        arcTypes[pointer[v] + i] = 1;
+        matrix[w][3] = v; // w parent = v
         search(w);
       }
-      // if w isn't over and isn't v ancestral
-      else if (matrix[w][1] == 0 && w != matrix[v][3]) {
-        // {v, w} -> back
-        System.out.println("Back -> {" + v + ", " + w + "}");
-      }
+      // {v, w} -> back
+      else if (matrix[w][2] == 0 && w != matrix[v][3]) arcTypes[pointer[v] + i] = 2;
+      // {v, w} -> forward
+      else if (matrix[v][1] < matrix[w][1]) arcTypes[pointer[v] + i] = 3;
+      // {v, w} -> cross
+      else if (matrix[v][1] > matrix[w][1]) arcTypes[pointer[v] + i] = 4;
     }
-
-    // print matrix
-    for (int l = 0; l < matrix.length; l++)  {  
-      for (int c = 0; c < matrix[l].length; c++)     { 
-          System.out.print(matrix[l][c] + " "); //imprime caracter a caracter
-      }  
-      System.out.println(" "); //muda de linha
-    } 
-    System.out.println();
     
     t++;
-    // tt = t
-    matrix[v][1] = t;
+    matrix[v][2] = t; // tt = t
   }
 
   public void print() {
-    System.out.println("End");
+    System.out.println();
+
+    for (int index = 1; index < pointer.length - 1; index++) {
+      int v = index;
+      int w;
+      int sucessors = pointer[v + 1] - pointer[v];
+      for (int j = 0; j < sucessors; j++){
+        if (arcTypes[pointer[v] + j] == 1) {
+          w = destination[pointer[v] + j];
+          System.out.println("Tree -> {" + v + ", " + w + "}");
+        }
+        if (arcTypes[pointer[v] + j] == 2) {
+          w = destination[pointer[v] + j];
+          System.out.println("Back -> {" + v + ", " + w + "}");
+        }
+        if (arcTypes[pointer[v] + j] == 3) {
+          w = destination[pointer[v] + j];
+          System.out.println("Forward -> {" + v + ", " + w + "}");
+        }
+        if (arcTypes[pointer[v] + j] == 4) {
+          w = destination[pointer[v] + j];
+          System.out.println("Cross -> {" + v + ", " + w + "}");
+        }
+      }
+    }
   }
 
   // utilities -------------------------------------------------------------------------

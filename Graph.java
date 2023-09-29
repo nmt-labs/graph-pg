@@ -20,8 +20,11 @@ public class Graph {
 
     switch(op) {
       case 1: fileOp = smallFile;
+        break;
       case 2: fileOp = largeFile;
+        break;
       case 3: fileOp = tinyFile;
+        break;
     }
 
     System.out.println("Choose activity");
@@ -53,10 +56,12 @@ public class Graph {
           rs.getVertex();
           rs.getVertexPredecessor();
         }
+        break;
 
       case 2:
         DepthFirstSearch dfs = new DepthFirstSearch(fileOp);
         dfs.print();
+        break;
     }
 
     sc.close();

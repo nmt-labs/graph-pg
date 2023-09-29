@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class ReverseStar {
     public static Scanner sc;
     private int vertexAmt, arcsAmt;
-    private int[] origin, destination, pointer, rev_pointer;
+    private int[] origin, destination, pointer, rev_pointer, org_destination;
 
     public int getVertexAmt() {
       return vertexAmt;
@@ -19,7 +19,7 @@ public class ReverseStar {
       return arcsAmt;
     }
     public int[] getDestination() {
-      return destination;
+      return org_destination;
     }
 
     public ReverseStar(String file) throws FileNotFoundException {
@@ -29,14 +29,18 @@ public class ReverseStar {
         arcsAmt = sc.nextInt();
         origin = new int[arcsAmt + 1];
         destination = new int[arcsAmt + 1];
-
+        org_destination = new int[arcsAmt + 1];
+        
         int i = 1; // always ignore position 1
         while (sc.hasNextInt()) {
             origin[i] = sc.nextInt();
-            destination[i++] = sc.nextInt();
+            destination[i] = sc.nextInt();
+            org_destination[i] = destination[i];
+            i++;
         }
+        //org_destination = destination;
         sc.close();
-
+        
         forwardStar();
         reverseStar();
     }
