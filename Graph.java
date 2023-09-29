@@ -56,6 +56,7 @@ public class Graph {
 
       case 2:
         DepthFirstSearch dfs = new DepthFirstSearch(fileOp);
+        dfs.print();
     }
 
     sc.close();

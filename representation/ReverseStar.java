@@ -12,6 +12,15 @@ public class ReverseStar {
     public int getVertexAmt() {
       return vertexAmt;
     }
+    public int[] getPointer() {
+      return pointer;
+    }
+    public int getArcsAmt() {
+      return arcsAmt;
+    }
+    public int[] getDestination() {
+      return destination;
+    }
 
     public ReverseStar(String file) throws FileNotFoundException {
         sc = new Scanner(new File(file));
